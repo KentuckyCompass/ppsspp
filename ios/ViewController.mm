@@ -50,14 +50,12 @@ private:
 	Draw::DrawContext *draw_;
 };
 
-float dp_xscale = 1.0f;
-float dp_yscale = 1.0f;
+static float dp_xscale = 1.0f;
+static float dp_yscale = 1.0f;
 
-double lastSelectPress = 0.0f;
-double lastStartPress = 0.0f;
-bool simulateAnalog = false;
-
-extern ScreenManager *screenManager;
+static double lastSelectPress = 0.0f;
+static double lastStartPress = 0.0f;
+static bool simulateAnalog = false;
 
 __unsafe_unretained static ViewController* sharedViewController;
 static GraphicsContext *graphicsContext;
