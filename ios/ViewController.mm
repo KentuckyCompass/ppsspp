@@ -14,6 +14,7 @@
 #include "file/zip_read.h"
 #include "input/input_state.h"
 #include "net/resolve.h"
+#include "profiler/profiler.h"
 #include "ui/screen.h"
 #include "thin3d/thin3d.h"
 #include "input/keycodes.h"
@@ -116,36 +117,38 @@ static GraphicsContext *graphicsContext;
 				targetIsJailbroken = true;
 			}
 		}
-		
-		NativeInit(0, NULL, [self.documentsPath UTF8String], [self.bundlePath UTF8String], NULL);
-
-		iCadeToKeyMap[iCadeJoystickUp]		= NKCODE_DPAD_UP;
-		iCadeToKeyMap[iCadeJoystickRight]	= NKCODE_DPAD_RIGHT;
-		iCadeToKeyMap[iCadeJoystickDown]	= NKCODE_DPAD_DOWN;
-		iCadeToKeyMap[iCadeJoystickLeft]	= NKCODE_DPAD_LEFT;
-		iCadeToKeyMap[iCadeButtonA]			= NKCODE_BUTTON_9; // Select
-		iCadeToKeyMap[iCadeButtonB]			= NKCODE_BUTTON_7; // LTrigger
-		iCadeToKeyMap[iCadeButtonC]			= NKCODE_BUTTON_10; // Start
-		iCadeToKeyMap[iCadeButtonD]			= NKCODE_BUTTON_8; // RTrigger
-		iCadeToKeyMap[iCadeButtonE]			= NKCODE_BUTTON_4; // Square
-		iCadeToKeyMap[iCadeButtonF]			= NKCODE_BUTTON_2; // Cross
-		iCadeToKeyMap[iCadeButtonG]			= NKCODE_BUTTON_1; // Triangle
-		iCadeToKeyMap[iCadeButtonH]			= NKCODE_BUTTON_3; // Circle
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
-		if ([GCController class]) // Checking the availability of a GameController framework
-		{
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controllerDidConnect:) name:GCControllerDidConnectNotification object:nil];
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controllerDidDisconnect:) name:GCControllerDidDisconnectNotification object:nil];
-		}
-#endif
 	}
 	return self;
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-
+	
+	PROFILE_INIT();
+	
+	NativeInit(0, NULL, [self.documentsPath UTF8String], [self.bundlePath UTF8String], NULL);
+	
+	iCadeToKeyMap[iCadeJoystickUp]		= NKCODE_DPAD_UP;
+	iCadeToKeyMap[iCadeJoystickRight]	= NKCODE_DPAD_RIGHT;
+	iCadeToKeyMap[iCadeJoystickDown]	= NKCODE_DPAD_DOWN;
+	iCadeToKeyMap[iCadeJoystickLeft]	= NKCODE_DPAD_LEFT;
+	iCadeToKeyMap[iCadeButtonA]			= NKCODE_BUTTON_9; // Select
+	iCadeToKeyMap[iCadeButtonB]			= NKCODE_BUTTON_7; // LTrigger
+	iCadeToKeyMap[iCadeButtonC]			= NKCODE_BUTTON_10; // Start
+	iCadeToKeyMap[iCadeButtonD]			= NKCODE_BUTTON_8; // RTrigger
+	iCadeToKeyMap[iCadeButtonE]			= NKCODE_BUTTON_4; // Square
+	iCadeToKeyMap[iCadeButtonF]			= NKCODE_BUTTON_2; // Cross
+	iCadeToKeyMap[iCadeButtonG]			= NKCODE_BUTTON_1; // Triangle
+	iCadeToKeyMap[iCadeButtonH]			= NKCODE_BUTTON_3; // Circle
+	
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+	if ([GCController class]) // Checking the availability of a GameController framework
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controllerDidConnect:) name:GCControllerDidConnectNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controllerDidDisconnect:) name:GCControllerDidDisconnectNotification object:nil];
+	}
+#endif
+	
 	self.view.frame = [[UIScreen mainScreen] bounds];
 	self.view.multipleTouchEnabled = YES;
 	self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
