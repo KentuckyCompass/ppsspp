@@ -66,8 +66,6 @@ static GraphicsContext *graphicsContext;
 }
 
 @property (nonatomic, strong) EAGLContext* context;
-@property (nonatomic, strong) NSString* documentsPath;
-@property (nonatomic, strong) NSString* bundlePath;
 @property (nonatomic, strong) NSMutableArray<NSDictionary *>* touches;
 //@property (nonatomic) iCadeReaderView* iCadeView;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
@@ -77,21 +75,12 @@ static GraphicsContext *graphicsContext;
 @end
 
 @implementation ViewController
--(bool) isArm64 {
-	size_t size;
-	cpu_type_t type;
-	size = sizeof(type);
-	sysctlbyname("hw.cputype", &type, &size, NULL, 0);
-	return type == CPU_TYPE_ARM64;
-}
 
 -(id) init {
 	self = [super init];
 	if (self) {
 		sharedViewController = self;
 		self.touches = [NSMutableArray array];
-		self.documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-		self.bundlePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/assets/"];
 	}
 	return self;
 }
